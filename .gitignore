@@ -1,0 +1,42 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+.vs/
+.vscode/
+*.nupkg
+.nuget/
+
+# ASP.NET settings (keep templates, ignore local overrides)
+appsettings.Development.json
+appsettings.Local.json
+
+# Node / React
+node_modules/
+dist/
+.eslintcache
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+*.egg-info/
+.env
+
+# IDE
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.temp
+
+# Docker
+*.pid
