@@ -9,6 +9,8 @@ public class YmmoDbContext(DbContextOptions<YmmoDbContext> options) : DbContext(
     public DbSet<Property> Properties => Set<Property>();
     public DbSet<Client> Clients => Set<Client>();
     public DbSet<Sale> Sales => Set<Sale>();
+    public DbSet<User> Users => Set<User>();
+    public DbSet<Visit> Visits => Set<Visit>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -27,6 +29,20 @@ public class YmmoDbContext(DbContextOptions<YmmoDbContext> options) : DbContext(
         modelBuilder.Entity<Sale>()
             .Property(s => s.SalePrice)
             .HasColumnType("numeric(18,2)");
+
+        modelBuilder.Entity<User>()
+            .Property(u => u.Role)
+            .HasConversion<string>();
+
+        modelBuilder.Entity<Visit>()
+            .Property(v => v.Status)
+            .HasConversion<string>();
+
+        modelBuilder.Entity<Visit>()
+            .HasOne(v => v.Agent)
+            .WithMany()
+            .HasForeignKey(v => v.AgentId)
+            .OnDelete(DeleteBehavior.SetNull);
 
         // Seed agencies
         modelBuilder.Entity<Agency>().HasData(
