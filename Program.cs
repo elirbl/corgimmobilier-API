@@ -25,6 +25,11 @@ builder.Services.AddCors(o => o.AddPolicy("AllowApp",
 
 // Authentification JWT
 var jwtSection = builder.Configuration.GetSection("Jwt");
+var jwtSecret = jwtSection["Secret"];
+if (string.IsNullOrWhiteSpace(jwtSecret))
+    throw new InvalidOperationException(
+        "Jwt:Secret n'est pas configuré. Définissez-le via les User Secrets, une variable d'environnement (Jwt__Secret), ou appsettings.Development.json (non versionné).");
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -39,7 +44,7 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         ValidIssuer = jwtSection["Issuer"],
         ValidAudience = jwtSection["Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSection["Secret"]!)),
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret)),
         ClockSkew = TimeSpan.Zero
     };
 });
