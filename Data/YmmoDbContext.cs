@@ -13,6 +13,7 @@ public class YmmoDbContext(DbContextOptions<YmmoDbContext> options) : DbContext(
     public DbSet<Visit> Visits => Set<Visit>();
     public DbSet<Photo> Photos => Set<Photo>();
     public DbSet<Message> Messages => Set<Message>();
+    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -63,6 +64,16 @@ public class YmmoDbContext(DbContextOptions<YmmoDbContext> options) : DbContext(
             .WithMany()
             .HasForeignKey(m => m.RecipientId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<RefreshToken>()
+            .HasOne(rt => rt.User)
+            .WithMany()
+            .HasForeignKey(rt => rt.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<RefreshToken>()
+            .HasIndex(rt => rt.Token)
+            .IsUnique();
 
         // Seed agencies
         modelBuilder.Entity<Agency>().HasData(

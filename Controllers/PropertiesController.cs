@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using YmmoApi.Data;
@@ -47,6 +48,7 @@ public class PropertiesController(YmmoDbContext db) : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin,Agent")]
     public async Task<ActionResult<Property>> Create(Property property)
     {
         property.ListedDate = DateOnly.FromDateTime(DateTime.UtcNow);
@@ -57,6 +59,7 @@ public class PropertiesController(YmmoDbContext db) : ControllerBase
     }
 
     [HttpPut("{id:int}")]
+    [Authorize(Roles = "Admin,Agent")]
     public async Task<IActionResult> Update(int id, Property property)
     {
         var existing = await db.Properties.FindAsync(id);
