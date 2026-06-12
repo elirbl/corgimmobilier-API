@@ -11,6 +11,8 @@ public class YmmoDbContext(DbContextOptions<YmmoDbContext> options) : DbContext(
     public DbSet<Sale> Sales => Set<Sale>();
     public DbSet<User> Users => Set<User>();
     public DbSet<Visit> Visits => Set<Visit>();
+    public DbSet<Photo> Photos => Set<Photo>();
+    public DbSet<Message> Messages => Set<Message>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -43,6 +45,24 @@ public class YmmoDbContext(DbContextOptions<YmmoDbContext> options) : DbContext(
             .WithMany()
             .HasForeignKey(v => v.AgentId)
             .OnDelete(DeleteBehavior.SetNull);
+
+        modelBuilder.Entity<Photo>()
+            .HasOne(ph => ph.Property)
+            .WithMany(p => p.Photos)
+            .HasForeignKey(ph => ph.PropertyId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Message>()
+            .HasOne(m => m.Sender)
+            .WithMany()
+            .HasForeignKey(m => m.SenderId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Message>()
+            .HasOne(m => m.Recipient)
+            .WithMany()
+            .HasForeignKey(m => m.RecipientId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         // Seed agencies
         modelBuilder.Entity<Agency>().HasData(
