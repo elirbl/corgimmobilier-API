@@ -15,6 +15,8 @@ public class Property
     public double Area { get; set; }
     public string? ImageUrl { get; set; }
     public DateOnly ListedDate { get; set; } = DateOnly.FromDateTime(DateTime.UtcNow);
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime? UpdatedAt { get; set; }
 
     public ICollection<Photo> Photos { get; set; } = [];
 }

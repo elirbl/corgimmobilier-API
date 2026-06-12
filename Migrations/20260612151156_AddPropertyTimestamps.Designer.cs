@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using YmmoApi.Data;
@@ -11,9 +12,11 @@ using YmmoApi.Data;
 namespace YmmoApi.Migrations
 {
     [DbContext(typeof(YmmoDbContext))]
-    partial class YmmoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260612151156_AddPropertyTimestamps")]
+    partial class AddPropertyTimestamps
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
