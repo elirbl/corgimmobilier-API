@@ -14,6 +14,7 @@ public class YmmoDbContext(DbContextOptions<YmmoDbContext> options) : DbContext(
     public DbSet<Photo> Photos => Set<Photo>();
     public DbSet<Message> Messages => Set<Message>();
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
+    public DbSet<AvailablePropertyListing> AvailablePropertyListings => Set<AvailablePropertyListing>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -28,6 +29,24 @@ public class YmmoDbContext(DbContextOptions<YmmoDbContext> options) : DbContext(
         modelBuilder.Entity<Property>()
             .Property(p => p.Status)
             .HasConversion<string>();
+
+        modelBuilder.Entity<Property>()
+            .Property(p => p.DpeRating)
+            .HasConversion<string>();
+
+        modelBuilder.Entity<Property>()
+            .HasOne(p => p.Agent)
+            .WithMany()
+            .HasForeignKey(p => p.AgentId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        modelBuilder.Entity<AvailablePropertyListing>(b =>
+        {
+            b.HasNoKey();
+            b.ToView("vw_biens_disponibles");
+            b.Property(x => x.Type).HasConversion<string>();
+            b.Property(x => x.DpeRating).HasConversion<string>();
+        });
 
         modelBuilder.Entity<Sale>()
             .Property(s => s.SalePrice)

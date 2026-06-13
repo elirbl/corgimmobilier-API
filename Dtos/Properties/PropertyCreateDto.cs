@@ -1,25 +1,19 @@
-namespace YmmoApi.Models;
+using YmmoApi.Models;
 
-public class Property
+namespace YmmoApi.Dtos.Properties;
+
+public class PropertyCreateDto
 {
-    public int Id { get; set; }
     public string Title { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public decimal Price { get; set; }
     public PropertyType Type { get; set; }
-    public PropertyStatus Status { get; set; }
+    public PropertyStatus Status { get; set; } = PropertyStatus.Available;
     public int AgencyId { get; set; }
-    public Agency? Agency { get; set; }
     public string City { get; set; } = string.Empty;
     public int Bedrooms { get; set; }
     public double Area { get; set; }
     public string? ImageUrl { get; set; }
     public PropertyDpe? DpeRating { get; set; }
     public int? AgentId { get; set; }
-    public User? Agent { get; set; }
-    public DateOnly ListedDate { get; set; } = DateOnly.FromDateTime(DateTime.UtcNow);
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public DateTime? UpdatedAt { get; set; }
-
-    public ICollection<Photo> Photos { get; set; } = [];
 }

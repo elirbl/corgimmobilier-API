@@ -16,6 +16,7 @@ SELECT
     p."City",
     p."Bedrooms",
     p."Area",
+    p."DpeRating",
     p."ListedDate",
     a."Id"          AS "AgencyId",
     a."Name"        AS "AgencyName",

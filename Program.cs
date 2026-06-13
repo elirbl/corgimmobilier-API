@@ -58,6 +58,9 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<IAgencyRepository, AgencyRepository>();
 builder.Services.AddScoped<IAgencyService, AgencyService>();
+builder.Services.AddScoped<IPropertyRepository, PropertyRepository>();
+builder.Services.AddScoped<IPropertyService, PropertyService>();
+builder.Services.AddScoped<IPhotoStorageService, PhotoStorageService>();
 
 // Validation
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
@@ -78,6 +81,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("AllowApp");
+
+app.UseStaticFiles();
 
 app.UseAuthentication();
 app.UseMiddleware<CurrentUserMiddleware>();
