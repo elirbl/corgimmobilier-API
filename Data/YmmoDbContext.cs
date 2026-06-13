@@ -18,6 +18,7 @@ public class YmmoDbContext(DbContextOptions<YmmoDbContext> options) : DbContext(
     public DbSet<Transaction> Transactions => Set<Transaction>();
     public DbSet<TransactionStageHistory> TransactionStageHistories => Set<TransactionStageHistory>();
     public DbSet<TransactionDocument> TransactionDocuments => Set<TransactionDocument>();
+    public DbSet<AgencyMonthlyRevenue> AgencyMonthlyRevenues => Set<AgencyMonthlyRevenue>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -50,6 +51,8 @@ public class YmmoDbContext(DbContextOptions<YmmoDbContext> options) : DbContext(
             b.Property(x => x.Type).HasConversion<string>();
             b.Property(x => x.DpeRating).HasConversion<string>();
         });
+
+        modelBuilder.Entity<AgencyMonthlyRevenue>().HasNoKey().ToTable((string?)null);
 
         modelBuilder.Entity<Sale>()
             .Property(s => s.SalePrice)
