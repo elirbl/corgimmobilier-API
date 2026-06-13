@@ -16,5 +16,13 @@ CREATE INDEX "IX_Properties_Status_City_Price"
 -- Index sur les clés étrangères des tables liées
 CREATE INDEX "IX_Visits_PropertyId"  ON "Visits" ("PropertyId");
 CREATE INDEX "IX_Visits_AgentId"     ON "Visits" ("AgentId");
+CREATE INDEX "IX_Visits_ClientId"    ON "Visits" ("ClientId");
 CREATE INDEX "IX_Sales_PropertyId"   ON "Sales" ("PropertyId");
 CREATE INDEX "IX_Photos_PropertyId"  ON "Photos" ("PropertyId");
+
+-- Index sur les clés étrangères des transactions
+CREATE INDEX "IX_Transactions_PropertyId"            ON "Transactions" ("PropertyId");
+CREATE INDEX "IX_Transactions_ClientId"              ON "Transactions" ("ClientId");
+CREATE INDEX "IX_Transactions_AgentId"               ON "Transactions" ("AgentId");
+CREATE INDEX "IX_TransactionStageHistories_TransactionId" ON "TransactionStageHistories" ("TransactionId");
+CREATE INDEX "IX_TransactionDocuments_TransactionId" ON "TransactionDocuments" ("TransactionId");

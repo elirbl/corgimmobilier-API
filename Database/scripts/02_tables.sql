@@ -72,12 +72,43 @@ CREATE TABLE "Visits" (
     "PropertyId"  INTEGER NOT NULL
         REFERENCES "Properties" ("Id") ON DELETE CASCADE,
     "ClientId"    INTEGER NOT NULL
-        REFERENCES "Clients" ("Id") ON DELETE CASCADE,
+        REFERENCES "Users" ("Id") ON DELETE CASCADE,
     "AgentId"     INTEGER NULL
         REFERENCES "Users" ("Id") ON DELETE SET NULL,
     "ScheduledAt" TIMESTAMPTZ NOT NULL,
     "Status"      visit_status NOT NULL DEFAULT 'Scheduled',
     "Notes"       TEXT NOT NULL
+);
+
+CREATE TABLE "Transactions" (
+    "Id"          SERIAL PRIMARY KEY,
+    "PropertyId"  INTEGER NOT NULL
+        REFERENCES "Properties" ("Id") ON DELETE CASCADE,
+    "ClientId"    INTEGER NOT NULL
+        REFERENCES "Users" ("Id") ON DELETE CASCADE,
+    "AgentId"     INTEGER NULL
+        REFERENCES "Users" ("Id") ON DELETE SET NULL,
+    "CurrentStage" transaction_stage NOT NULL DEFAULT 'Interest',
+    "CreatedAt"   TIMESTAMPTZ NOT NULL DEFAULT now(),
+    "UpdatedAt"   TIMESTAMPTZ NULL
+);
+
+CREATE TABLE "TransactionStageHistories" (
+    "Id"            SERIAL PRIMARY KEY,
+    "TransactionId" INTEGER NOT NULL
+        REFERENCES "Transactions" ("Id") ON DELETE CASCADE,
+    "Stage"         transaction_stage NOT NULL,
+    "ChangedAt"     TIMESTAMPTZ NOT NULL DEFAULT now(),
+    "Notes"         TEXT NULL
+);
+
+CREATE TABLE "TransactionDocuments" (
+    "Id"            SERIAL PRIMARY KEY,
+    "TransactionId" INTEGER NOT NULL
+        REFERENCES "Transactions" ("Id") ON DELETE CASCADE,
+    "FileName"      TEXT NOT NULL,
+    "Url"           TEXT NOT NULL,
+    "UploadedAt"    TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
 CREATE TABLE "Photos" (

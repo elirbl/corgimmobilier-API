@@ -28,3 +28,11 @@ CREATE TYPE visit_status AS ENUM (
     'Completed',
     'Cancelled'
 );
+
+CREATE TYPE transaction_stage AS ENUM (
+    'Interest',
+    'Visit',
+    'Offer',
+    'Compromise',
+    'Deed'
+);

@@ -6,7 +6,7 @@ public class Visit
     public int PropertyId { get; set; }
     public Property? Property { get; set; }
     public int ClientId { get; set; }
-    public Client? Client { get; set; }
+    public User? Client { get; set; }
     public int? AgentId { get; set; }
     public User? Agent { get; set; }
     public DateTime ScheduledAt { get; set; }

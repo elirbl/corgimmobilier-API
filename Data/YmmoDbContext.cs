@@ -15,6 +15,9 @@ public class YmmoDbContext(DbContextOptions<YmmoDbContext> options) : DbContext(
     public DbSet<Message> Messages => Set<Message>();
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
     public DbSet<AvailablePropertyListing> AvailablePropertyListings => Set<AvailablePropertyListing>();
+    public DbSet<Transaction> Transactions => Set<Transaction>();
+    public DbSet<TransactionStageHistory> TransactionStageHistories => Set<TransactionStageHistory>();
+    public DbSet<TransactionDocument> TransactionDocuments => Set<TransactionDocument>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -65,6 +68,50 @@ public class YmmoDbContext(DbContextOptions<YmmoDbContext> options) : DbContext(
             .WithMany()
             .HasForeignKey(v => v.AgentId)
             .OnDelete(DeleteBehavior.SetNull);
+
+        modelBuilder.Entity<Visit>()
+            .HasOne(v => v.Client)
+            .WithMany()
+            .HasForeignKey(v => v.ClientId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Transaction>()
+            .Property(t => t.CurrentStage)
+            .HasConversion<string>();
+
+        modelBuilder.Entity<Transaction>()
+            .HasOne(t => t.Property)
+            .WithMany()
+            .HasForeignKey(t => t.PropertyId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Transaction>()
+            .HasOne(t => t.Client)
+            .WithMany()
+            .HasForeignKey(t => t.ClientId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Transaction>()
+            .HasOne(t => t.Agent)
+            .WithMany()
+            .HasForeignKey(t => t.AgentId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        modelBuilder.Entity<TransactionStageHistory>()
+            .Property(h => h.Stage)
+            .HasConversion<string>();
+
+        modelBuilder.Entity<TransactionStageHistory>()
+            .HasOne(h => h.Transaction)
+            .WithMany(t => t.StageHistory)
+            .HasForeignKey(h => h.TransactionId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<TransactionDocument>()
+            .HasOne(d => d.Transaction)
+            .WithMany(t => t.Documents)
+            .HasForeignKey(d => d.TransactionId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<Photo>()
             .HasOne(ph => ph.Property)

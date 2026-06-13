@@ -61,6 +61,12 @@ builder.Services.AddScoped<IAgencyService, AgencyService>();
 builder.Services.AddScoped<IPropertyRepository, PropertyRepository>();
 builder.Services.AddScoped<IPropertyService, PropertyService>();
 builder.Services.AddScoped<IPhotoStorageService, PhotoStorageService>();
+builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+builder.Services.AddScoped<ITransactionService, TransactionService>();
+builder.Services.AddScoped<IVisitRepository, VisitRepository>();
+builder.Services.AddScoped<IVisitService, VisitService>();
+builder.Services.AddScoped<IDocumentStorageService, DocumentStorageService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 // Validation
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
