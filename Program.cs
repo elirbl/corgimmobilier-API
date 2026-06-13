@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using YmmoApi.Data;
+using YmmoApi.Hubs;
 using YmmoApi.Middleware;
 using YmmoApi.Services;
 using YmmoApi.Services.Interfaces;
@@ -21,7 +22,9 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new() { Title = "Ymmo API", Version = "v1" }));
 
 builder.Services.AddCors(o => o.AddPolicy("AllowApp",
-    p => p.WithOrigins("http://localhost:5173").AllowAnyHeader().AllowAnyMethod()));
+    p => p.WithOrigins("http://localhost:5173").AllowAnyHeader().AllowAnyMethod().AllowCredentials()));
+
+builder.Services.AddSignalR();
 
 // Authentification JWT
 var jwtSection = builder.Configuration.GetSection("Jwt");
@@ -47,6 +50,22 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret)),
         ClockSkew = TimeSpan.Zero
     };
+
+    // Le hub SignalR ne peut pas envoyer l'en-tête Authorization (WebSocket/SSE) :
+    // on récupère le token via la query string "access_token".
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            var accessToken = context.Request.Query["access_token"];
+            var path = context.HttpContext.Request.Path;
+
+            if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs/chat"))
+                context.Token = accessToken;
+
+            return Task.CompletedTask;
+        }
+    };
 });
 
 builder.Services.AddAuthorization();
@@ -67,6 +86,8 @@ builder.Services.AddScoped<IVisitRepository, VisitRepository>();
 builder.Services.AddScoped<IVisitService, VisitService>();
 builder.Services.AddScoped<IDocumentStorageService, DocumentStorageService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IMessageRepository, MessageRepository>();
+builder.Services.AddScoped<IMessageService, MessageService>();
 
 // Validation
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
@@ -95,4 +116,5 @@ app.UseMiddleware<CurrentUserMiddleware>();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<ChatHub>("/hubs/chat");
 app.Run();
