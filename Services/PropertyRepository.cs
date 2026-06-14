@@ -102,6 +102,9 @@ public class PropertyRepository(YmmoDbContext db) : IPropertyRepository
         if (filter.DpeRating.HasValue)
             query = query.Where(p => p.DpeRating == filter.DpeRating);
 
+        if (filter.AgentId.HasValue)
+            query = query.Where(p => p.AgentId == filter.AgentId);
+
         return query;
     }
 

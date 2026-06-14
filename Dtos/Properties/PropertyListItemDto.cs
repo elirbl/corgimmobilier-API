@@ -17,4 +17,5 @@ public class PropertyListItemDto
     public DateOnly ListedDate { get; set; }
     public int AgencyId { get; set; }
     public string AgencyName { get; set; } = string.Empty;
+    public int? AgentId { get; set; }
 }

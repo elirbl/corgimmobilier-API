@@ -64,6 +64,23 @@ public class TransactionService(
         return ServiceResult<TransactionDetailDto>.Success(ToDetailDto(transaction));
     }
 
+    public async Task<List<TransactionListItemDto>> GetMineAsync(int currentUserId, UserRole currentRole)
+    {
+        var transactions = await repository.GetMineAsync(currentUserId, currentRole);
+        return transactions.Select(t => new TransactionListItemDto
+        {
+            Id = t.Id,
+            PropertyId = t.PropertyId,
+            PropertyTitle = t.Property?.Title ?? string.Empty,
+            PropertyImageUrl = t.Property?.Photos.FirstOrDefault(p => p.IsMain)?.Url ?? t.Property?.Photos.FirstOrDefault()?.Url,
+            ClientName = $"{t.Client?.FirstName} {t.Client?.LastName}".Trim(),
+            AgentName = t.Agent is null ? null : $"{t.Agent.FirstName} {t.Agent.LastName}".Trim(),
+            CurrentStage = t.CurrentStage,
+            CreatedAt = t.CreatedAt,
+            UpdatedAt = t.UpdatedAt
+        }).ToList();
+    }
+
     public async Task<ServiceResult<TransactionDetailDto>> AdvanceStageAsync(int id, TransactionStageUpdateDto dto, int agentId)
     {
         var transaction = await repository.GetByIdAsync(id);

@@ -209,7 +209,8 @@ public class PropertyService(IPropertyRepository repository, IPhotoStorageServic
         ImageUrl = p.ImageUrl,
         ListedDate = p.ListedDate,
         AgencyId = p.AgencyId,
-        AgencyName = p.Agency?.Name ?? string.Empty
+        AgencyName = p.Agency?.Name ?? string.Empty,
+        AgentId = p.AgentId
     };
 
     private static PropertyDetailDto ToDetailDto(Property p) => new()

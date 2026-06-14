@@ -22,6 +22,25 @@ public class TransactionRepository(YmmoDbContext db) : ITransactionRepository
             .Include(t => t.Documents)
             .FirstOrDefaultAsync(t => t.Id == id);
 
+    public Task<List<Transaction>> GetMineAsync(int userId, UserRole role)
+    {
+        var query = db.Transactions
+            .Include(t => t.Property)
+                .ThenInclude(p => p!.Photos)
+            .Include(t => t.Client)
+            .Include(t => t.Agent)
+            .AsQueryable();
+
+        query = role switch
+        {
+            UserRole.Admin => query,
+            UserRole.Agent => query.Where(t => t.AgentId == userId),
+            _ => query.Where(t => t.ClientId == userId)
+        };
+
+        return query.OrderByDescending(t => t.UpdatedAt ?? t.CreatedAt).ToListAsync();
+    }
+
     public async Task AddAsync(Transaction transaction) =>
         await db.Transactions.AddAsync(transaction);
 

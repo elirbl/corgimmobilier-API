@@ -27,6 +27,7 @@ public class PropertiesController(
         [FromQuery] double? surface,
         [FromQuery] string? ville,
         [FromQuery] PropertyDpe? dpe,
+        [FromQuery] int? agentId,
         [FromQuery] int page = 1,
         [FromQuery] int pageSize = 20,
         [FromQuery] string? sort = null)
@@ -39,7 +40,8 @@ public class PropertiesController(
             MaxPrice = prixMax,
             MinArea = surface,
             City = ville,
-            DpeRating = dpe
+            DpeRating = dpe,
+            AgentId = agentId
         };
 
         var result = await propertyService.GetPagedAsync(filter, page, pageSize, sort, currentUser.IsAuthenticated);

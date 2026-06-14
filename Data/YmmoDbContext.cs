@@ -19,6 +19,7 @@ public class YmmoDbContext(DbContextOptions<YmmoDbContext> options) : DbContext(
     public DbSet<TransactionStageHistory> TransactionStageHistories => Set<TransactionStageHistory>();
     public DbSet<TransactionDocument> TransactionDocuments => Set<TransactionDocument>();
     public DbSet<AgencyMonthlyRevenue> AgencyMonthlyRevenues => Set<AgencyMonthlyRevenue>();
+    public DbSet<Favorite> Favorites => Set<Favorite>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -142,6 +143,22 @@ public class YmmoDbContext(DbContextOptions<YmmoDbContext> options) : DbContext(
 
         modelBuilder.Entity<RefreshToken>()
             .HasIndex(rt => rt.Token)
+            .IsUnique();
+
+        modelBuilder.Entity<Favorite>()
+            .HasOne(f => f.User)
+            .WithMany()
+            .HasForeignKey(f => f.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Favorite>()
+            .HasOne(f => f.Property)
+            .WithMany()
+            .HasForeignKey(f => f.PropertyId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Favorite>()
+            .HasIndex(f => new { f.UserId, f.PropertyId })
             .IsUnique();
 
         // Seed agencies

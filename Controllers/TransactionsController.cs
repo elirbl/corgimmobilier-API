@@ -32,6 +32,13 @@ public class TransactionsController(
         return CreatedAtAction(nameof(GetById), new { id = result.Data!.Id }, ApiResponse<TransactionDetailDto>.Ok(result.Data));
     }
 
+    [HttpGet("mine")]
+    public async Task<ActionResult<ApiResponse<List<TransactionListItemDto>>>> GetMine()
+    {
+        var result = await transactionService.GetMineAsync(currentUser.UserId!.Value, currentUser.Role!.Value);
+        return Ok(ApiResponse<List<TransactionListItemDto>>.Ok(result));
+    }
+
     [HttpGet("{id:int}")]
     public async Task<ActionResult<ApiResponse<TransactionDetailDto>>> GetById(int id)
     {

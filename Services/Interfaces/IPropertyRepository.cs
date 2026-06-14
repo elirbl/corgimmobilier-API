@@ -11,6 +11,7 @@ public record PropertyFilter
     public double? MinArea { get; init; }
     public string? City { get; init; }
     public PropertyDpe? DpeRating { get; init; }
+    public int? AgentId { get; init; }
 }
 
 public interface IPropertyRepository
