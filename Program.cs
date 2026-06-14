@@ -22,7 +22,7 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new() { Title = "Ymmo API", Version = "v1" }));
 
 builder.Services.AddCors(o => o.AddPolicy("AllowApp",
-    p => p.WithOrigins("http://localhost:5173").AllowAnyHeader().AllowAnyMethod().AllowCredentials()));
+    p => p.WithOrigins("http://localhost:5173", "http://localhost:3000").AllowAnyHeader().AllowAnyMethod().AllowCredentials()));
 
 builder.Services.AddSignalR();
 

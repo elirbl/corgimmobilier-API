@@ -40,3 +40,4 @@ Thumbs.db
 
 # Docker
 *.pid
+.env.docker
