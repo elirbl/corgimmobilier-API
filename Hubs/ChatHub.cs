@@ -32,6 +32,12 @@ public class ChatHub(IMessageService messageService) : Hub
         await Clients.User(recipientId.ToString()).SendAsync("UnreadMessage", message);
     }
 
+    public async Task Typing(int recipientId)
+    {
+        var senderId = GetUserId();
+        await Clients.User(recipientId.ToString()).SendAsync("UserTyping", new { UserId = senderId });
+    }
+
     public async Task MarkAsRead(int otherUserId)
     {
         var userId = GetUserId();
